@@ -34,12 +34,13 @@ maybe later, this repo could be supported via pip package.
 │    │     ├── main.py   (train & eval & inference)
 │    │     ├── model.py  (model script)
 │    │     └── readme.md (results & explains)
-│    └── ...  (dir, model name)
+│    └── ... (dir, model name)
 │          └── ...
-├── ops.py         (useful TF util)
-├── utils.py       (useful utilities)
-├── dataloader.py  (dataset loader)
-└── readme.py  (readme)
+├── ops.py         (useful tf operators)
+├── utils.py       (useful image utilities)
+├── metrics.py     (metrics for evaluating SR Model)
+├── dataloader.py  (dataset loader / feeder)
+└── readme.py      (readme)
 ```
 
 ## Papers & Codes
