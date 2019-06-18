@@ -53,6 +53,7 @@ maybe later, this repo could be supported via pip package.
  FSRGAN     | *Accelerating the Super-Resolution Convolutional Neural Network* | [[arXiv]](https://arxiv.org/abs/1608.00367) | [[~~code~~]](./models/FSRGAN)
  EnhanceNet | *Single Image Super-Resolution Through Automated Texture Synthesis* | [[arXiv]](https://arxiv.org/abs/1612.07919) | [[~~code~~]](./models/ENet)
 **2017**    | | |
+ LapSRN     | *Deep Laplacian Pyramid Networks for Fast and Accurate Super-Resolution* | [[arXiv]](https://arxiv.org/abs/1704.03915) | [[~~code~~]](./models/LapSRN)
  EDSR       | *Enhanced Deep Residual Networks for Single Image Super-Resolution* | [[arXiv]](https://arxiv.org/abs/1707.02921) | [[~~code~~]](./models/EDSR)
 **2018**    | | |
  RCAN       | *Image Super-Resolution Using Very Deep Residual Channel Attention Networks* | [[arXiv]](https://arxiv.org/abs/1807.02758) | [[~~code~~]](./models/RCAN)
