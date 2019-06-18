@@ -59,6 +59,7 @@ maybe later, this repo could be supported via pip package.
  RCAN       | *Image Super-Resolution Using Very Deep Residual Channel Attention Networks* | [[arXiv]](https://arxiv.org/abs/1807.02758) | [[~~code~~]](./models/RCAN)
  ESRGAN     | *Enhanced SRGAN. Champion PIRM Challenge on Perceptual Super-Resolution* | [[arXiv]](https://arxiv.org/abs/1809.00219) | [[~~code~~]](./models/ESRGAN/)
 **2019**    | | |
+ NNTSR      | *Image Super-Resolution by Neural Texture Transfer* | [[arXiv]](https://arxiv.org/abs/1903.00834) | [[~~code~~]]()
 
 ## Pre-Trained Models
 
