@@ -311,3 +311,8 @@ def orth_regularizer(scale: float = 1e-4):
 
 def orth_regularizer_fully(scale: float = 1e-4):
     return orthogonal_regularizer_fully(scale)
+
+
+w_init = he_uniform_initializer()
+w_reg = orth_regularizer(1e-4)
+w_reg_fully = orth_regularizer_fully(1e-4)
