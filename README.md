@@ -9,7 +9,7 @@ maybe later, this repo could be supported via pip package.
 
 ## Usage
 ### ~~PIP~~
-    ~~$ pip3 install -U sr_models~~
+    [not available yet :(]
 ### Download
     $ git clone https://github.com/kozistr/Awesome-Super-Resolution
     $ cd ./Awesome-Super-Resolution
