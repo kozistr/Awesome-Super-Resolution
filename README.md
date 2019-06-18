@@ -48,8 +48,10 @@ maybe later, this repo could be supported via pip package.
 :---: | :---: | :---: | :---:
 **2016** | | |
 **2017** | | |
- SRGAN   | *Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network* | [[arXiv]](https://arxiv.org/abs/1609.04802) | [[code]](./SRGAN)
+ SRGAN   | *Photo-Realistic Single Image Super-Resolution Using a Generative Adversarial Network* | [[arXiv]](https://arxiv.org/abs/1609.04802) | [[~~code~~]](./models/SRGAN)
+ FSRGAN  | *Accelerating the Super-Resolution Convolutional Neural Network* | [[arXiv]](https://arxiv.org/abs/1608.00367) | [[~~code~~]](./models/FSRGAN)
 **2018** | | |
+ ESRGAN  | *Enhanced SRGAN. Champion PIRM Challenge on Perceptual Super-Resolution* | [[arXiv]](https://arxiv.org/abs/1809.00219) | [[~~code~~]](./models/ESRGAN/)
 **2019** | | |
 
 ## Pre-Trained Models
