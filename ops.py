@@ -127,35 +127,6 @@ def conv2d(x,
         return x
 
 
-def gate_conv2d(x_in,
-                channels: int, kernel: int = 3, stride: int = 1, pad: int = 0, rate: int = 1,
-                padding: str = "SAME",
-                use_lrn: bool = True, sn: bool = True,
-                scope: str = "gated_conv2d_0"):
-    with tf.variable_scope(scope):
-        assert padding in ["SYMMETRIC", "SAME", "REFELECT"]
-        if padding == "SYMMETRIC" or padding == "REFELECT":
-            p = int(rate * (kernel - 1) / 2)
-            x_in = tf.pad(x_in, [[0, 0], [p, p], [p, p], [0, 0]], mode=padding)
-            padding = "VALID"
-
-        x = tf.layers.conv2d(
-            x_in, channels, kernel, stride, dilation_rate=rate,
-            activation=tf.nn.sigmoid, padding=padding)
-
-        if use_lrn:
-            x = tf.nn.lrn(x, bias=5e-5)
-
-        x = tf.nn.leaky_relu(x, alpha=.2)
-
-        g = tf.layers.conv2d(
-            x_in, channels, kernel, stride, dilation_rate=rate,
-            activation=tf.nn.sigmoid, padding=padding)
-
-        x = tf.multiply(x, g)
-        return x, g
-
-
 def deconv2d(x,
              channels: int,
              kernel: int = 4, stride: int = 2, padding: str = "SAME",
@@ -186,23 +157,6 @@ def deconv2d(x,
                                            kernel_regularizer=w_reg,
                                            strides=stride, padding=padding, use_bias=use_bias)
         return x
-
-
-def gate_deconv2d(x_in,
-                  channels: int, kernel: int = 5, stride: int = 2,
-                  padding: str = "SAME",
-                  scope: str = "gated_deconv2d_0"):
-    with tf.variable_scope(scope):
-        x = tf.layers.conv2d_transpose(
-            x_in, channels, kernel, stride,
-            activation=tf.nn.leaky_relu, padding=padding)
-
-        g = tf.layers.conv2d_transpose(
-            x_in, channels, kernel, stride,
-            activation=tf.nn.sigmoid, padding=padding)
-
-        x = tf.multiply(x, g)
-        return x, g
 
 
 def dense(x, units: int,
