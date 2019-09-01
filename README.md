@@ -59,6 +59,7 @@ maybe later, this repo could be supported via pip package.
 **2018**    | | |
  RCAN       | *Image Super-Resolution Using Very Deep Residual Channel Attention Networks* | [[arXiv]](https://arxiv.org/abs/1807.02758) | [[~~code~~]](./models/RCAN)
  ESRGAN     | *Enhanced SRGAN. Champion PIRM Challenge on Perceptual Super-Resolution* | [[arXiv]](https://arxiv.org/abs/1809.00219) | [[~~code~~]](./models/ESRGAN/)
+ FEQE       | *Fast and Efficient Image Quality Enhancement via Desubpixel Convolutional Neural Networks* | [[ECCV]](http://openaccess.thecvf.com/content_ECCVW_2018/papers/11133/Vu_Fast_and_Efficient_Image_Quality_Enhancement_via_Desubpixel_Convolutional_Neural_ECCVW_2018_paper.pdf) | [[~~code~~]](./models/FEQE)
 **2019**    | | |
  NNTSR      | *Image Super-Resolution by Neural Texture Transfer* | [[arXiv]](https://arxiv.org/abs/1903.00834) | [[~~code~~]]()
 
