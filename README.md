@@ -30,6 +30,8 @@ maybe later, this repo could be supported via pip package.
 │
 ├── assets (dir, images used in readme.md)
 ├── models
+│    ├── vgg16.py (VGG19 model loader)
+│    ├── vgg19.py (VGG16 model loader)
 │    ├── xxx (dir, model name)
 │    │     ├── logs      (tensorboard logs)
 │    │     ├── config.py (configurations)
