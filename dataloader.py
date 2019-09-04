@@ -1,7 +1,6 @@
 import numpy as np
 import tensorflow as tf
 
-
 seed: int = 13371337
 
 # reproducibility
