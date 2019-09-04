@@ -4,6 +4,7 @@ import tensorflow as tf
 
 seed: int = 13371337
 
+# reproducibility
 np.random.seed(seed)
 tf.set_random_seed(seed)
 
@@ -12,11 +13,11 @@ class ImageDataLoader:
     def __init__(self,
                  patch_shape: tuple = (128, 128),
                  channels: int = 3,
-                 patch_size: int = 16):
+                 n_patches: int = 16):
         self.patch_shape = patch_shape
         self.channels = channels
-        self.patch_size = patch_size
-        self.scale = int(np.sqrt(self.patch_size))
+        self.n_patches = n_patches
+        self.scale = int(np.sqrt(self.n_patches))
 
         self.lr_patch_shape = (
             self.patch_shape[0],
@@ -25,6 +26,10 @@ class ImageDataLoader:
             self.patch_shape[0] * self.scale,
             self.patch_shape[1] * self.scale
         )
+
+    @staticmethod
+    def normalize(x):
+        return (x / 127.5) - 1.
 
     def random_crop(self, x_lr, x_hr):
         x_hr_shape = x_hr.get_shape().as_list()
@@ -40,26 +45,26 @@ class ImageDataLoader:
         x_hr = x_hr[rand_hr_w:rand_hr_w + self.hr_patch_shape[0], rand_hr_h:rand_hr_h + self.hr_patch_shape[1], :]
         return x_lr, x_hr
 
-    def pre_processing(self, fn):
+    def pre_processing(self, fn, use_augmentation: bool = True):
         lr = tf.read_file(fn[0])
         lr = tf.image.decode_png(lr, channels=self.channels)
-        lr = tf.cast(lr, dtype=tf.float32) / 255.
+        lr = self.normalize(tf.cast(lr, dtype=tf.float32))
 
         hr = tf.read_file(fn[1])
         hr = tf.image.decode_png(hr, channels=self.channels)
-        hr = tf.cast(hr, dtype=tf.float32) / 255.
+        hr = self.normalize(tf.cast(hr, dtype=tf.float32))
 
         # random crop
         lr, hr = self.random_crop(lr, hr)
 
-        # augmentations
-        if np.random.randint(0, 2) == 0:
-            lr = tf.image.flip_up_down(lr)
-            hr = tf.image.flip_up_down(hr)
+        if use_augmentation:
+            if np.random.randint(0, 2) == 0:
+                lr = tf.image.flip_up_down(lr)
+                hr = tf.image.flip_up_down(hr)
 
-        if np.random.randint(0, 2) == 0:
-            lr = tf.image.rot90(lr)
-            hr = tf.image.rot90(hr)
+            if np.random.randint(0, 2) == 0:
+                lr = tf.image.rot90(lr)
+                hr = tf.image.rot90(hr)
 
         # split into patches
         lr_patches = tf.image.extract_image_patches(
