@@ -1,4 +1,4 @@
-# Awesome-Super Resolution
+# Awesome Super Resolution
 Lots of SISR (Single Image Super Resolution) implementations in tensorflow *maybe w/ pre-trained model!*
 
 maybe later, this repo could be supported via pip package.
@@ -16,7 +16,9 @@ maybe later, this repo could be supported via pip package.
 ### Dependency Install
     $ pip3 install -r ./requirements.txt
 ### Train / Eval / Inference
-    $ python3 ./models/xxx/train.py [w/ some parameters]
+    $ python3 train.py [w/ some parameters]
+    $ python3 eval.py [w/ some parameters]
+    $ python3 inference.py [w/ some parameters]
 
 ## DataSets
 * DIV2K
@@ -31,11 +33,13 @@ maybe later, this repo could be supported via pip package.
 │    ├── xxx (dir, model name)
 │    │     ├── logs      (tensorboard logs)
 │    │     ├── config.py (configurations)
-│    │     ├── main.py   (train & eval & inference)
 │    │     ├── model.py  (model script)
 │    │     └── readme.md (results & explains)
 │    └── ... (dir, model name)
 │          └── ...
+├── train.py       (trainer)
+├── eval.py        (evaluator)
+├── inference.py   (inferencer)
 ├── ops.py         (useful tf operators)
 ├── utils.py       (useful image utilities)
 ├── metrics.py     (metrics for evaluating SR Model)
