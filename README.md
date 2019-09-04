@@ -69,16 +69,12 @@ maybe later, this repo could be supported via pip package.
  NNTSR      | *Image Super-Resolution by Neural Texture Transfer* | [[arXiv]](https://arxiv.org/abs/1903.00834) | [[~~code~~]]()
 
 ## Pre-Trained Models
-
 It's on the plan, but, because of the lack of hardware resources, it can be.
 
 ## To-Be-Done
 0. TBD
-1. TBD
-2. TBD
 
 ## ETC
-
 **Any suggestions and PRs and issues are WELCOME :)**
 
 ## Author
