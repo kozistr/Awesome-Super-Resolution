@@ -5,6 +5,8 @@ maybe later, this repo could be supported via pip package.
 
 **Currently, Work-In-Progress**
 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/kozistr/Awesome-Super-Resolution.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kozistr/Awesome-Super-Resolution/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/kozistr/Awesome-Super-Resolution.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kozistr/Awesome-Super-Resolution/context:python)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Usage
