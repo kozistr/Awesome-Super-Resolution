@@ -1,6 +1,5 @@
 import os
 import random
-
 from glob import glob
 from time import time
 from typing import Optional
@@ -11,15 +10,12 @@ import tensorflow as tf
 import tensorflow.contrib.slim as slim
 
 from dataloader import ImageDataLoader
-
-from ops import dense
-from ops import conv2d
-from ops import sub_pixel
-
-from losses import generator_loss
 from losses import discriminator_loss
-
-from .vgg19 import VGG19
+from losses import generator_loss
+from ops import conv2d
+from ops import dense
+from ops import sub_pixel
+from ..vgg19 import VGG19
 
 
 class ESRGAN:
@@ -35,6 +31,7 @@ class ESRGAN:
                  n_feats: int = 64,
                  n_res_blocks: int = 23,
                  use_sn: bool = True,
+                 use_pixel_shuffle: bool = False,
                  gan_type: str = "lsgan",
                  use_ra: bool = True,
                  lambda_gp: float = 10.,
@@ -73,6 +70,7 @@ class ESRGAN:
         self.n_feats = n_feats
         self.n_res_blocks = n_res_blocks
         self.use_sn = use_sn
+        self.use_pixel_shuffle = use_pixel_shuffle
         self.gan_type = gan_type
         self.use_ra = use_ra
         self.n_critic = n_critic
@@ -171,7 +169,7 @@ class ESRGAN:
             x = conv2d(x_init, ch, kernel=kernel, stride=1, pad=pad,
                        use_bias=use_bias, sn=sn,
                        scope="conv2d_1")
-            x = tf.nn.leaky_relu(x, alpha=.2)
+            x = tf.nn.relu(x)
 
             x = conv2d(x, ch, kernel=kernel, stride=1, pad=pad,
                        use_bias=use_bias, sn=sn,
@@ -191,6 +189,7 @@ class ESRGAN:
                 x = conv2d(x, ch // 2, kernel=3, stride=1, pad=1, use_bias=use_bias, sn=sn,
                            scope="conv2d_{}".format(i))
                 x = tf.nn.leaky_relu(x, alpha=.2)
+
                 x_concat.append(x)
 
             x = tf.concat(x_concat, axis=-1)
@@ -231,13 +230,15 @@ class ESRGAN:
     def generator(self, x_lr, reuse: bool = False):
         ch: int = self.n_feats
 
-        with tf.variable_scope("generator_v3", reuse=reuse):
-            x = conv2d(x_lr, self.input_shape[-1], kernel=3, stride=1, pad=1,
-                       use_bias=False, sn=self.use_sn, scope="conv2d_init")
+        with tf.variable_scope("generator", reuse=reuse):
+            x = conv2d(x_lr, self.input_shape[-1],
+                       kernel=3, stride=1, pad=1,
+                       use_bias=True, sn=False,
+                       scope="conv2d_init")
             x_lsc = x
 
             for nb in range(self.n_res_blocks):
-                x = self.residual_dense_block(x, ch=ch, use_bias=True, sn=self.use_sn,
+                x = self.residual_dense_block(x, ch=ch, use_bias=True, sn=False,
                                               scope="RRDB-{}".format(nb + 1))
 
             x = conv2d(x, ch, kernel=3, stride=1, pad=1, use_bias=True, scope="conv2d_trunk")
@@ -247,17 +248,21 @@ class ESRGAN:
             # up-sampling
             scale: int = int(np.log2(self.patch_size))
             for i in range(scale):
-                x = conv2d(x, ch * 4, kernel=3, stride=1, pad=1, scope="conv2d_up_{}".format(i))
-                x = sub_pixel_conv2d(x, f=None, s=scale)
+                if self.use_pixel_shuffle:
+                    x = conv2d(x, ch * 4, kernel=3, stride=1, pad=1, scope="conv2d_up_{}".format(i))
+                    x = sub_pixel(x, f=None, s=scale)
+                else:
+                    _, w, h, _ = x.get_shape().as_list()
+                    x = tf.image.resize_nearest_neighbor(x, (w * 2, h * 2), name='nn_upsample_{}'.format(i))
+                    x = conv2d(x, ch, kernel=3, stride=1, pad=1, scope="conv2d_up_{}".format(i))
                 x = tf.nn.leaky_relu(x, alpha=.2)
 
             x = conv2d(x, ch, kernel=3, stride=1, pad=1,
-                       use_bias=True, sn=self.use_sn, scope="conv2d_hr")
+                       use_bias=True, sn=False, scope="conv2d_hr")
             x = tf.nn.leaky_relu(x, alpha=.2)
 
             x = conv2d(x, self.input_shape[-1], kernel=3, stride=1, pad=1,
-                       use_bias=True, sn=self.use_sn, scope="conv2d_last")
-            x = tf.sigmoid(x)
+                       use_bias=True, sn=False, scope="conv2d_last")
             return x
 
     def discriminator(self, x_hr, reuse: bool = False):
@@ -319,7 +324,7 @@ class ESRGAN:
 
     def build_data_loader(self):
         self.data_loader = ImageDataLoader(patch_shape=self.input_shape,
-                                           patch_size=self.patch_size)
+                                           n_patches=self.patch_size)
 
         inputs = tf.data.Dataset.from_tensor_slices(self.data)
         inputs = inputs. \
@@ -335,7 +340,8 @@ class ESRGAN:
 
     def build_vgg19_model(self, x, reuse: bool = False):
         with tf.variable_scope("vgg19", reuse=reuse):
-            x = tf.cast(x * 255., dtype=tf.float32)
+            x = (x + 1.) * 127.5
+            x = tf.cast(x, dtype=tf.float32)
 
             r, g, b = tf.split(x, 3, 3)
             bgr = tf.concat([b - self.vgg_mean[0],
